@@ -29,9 +29,13 @@
 
     body {
       min-height: 100%;
-      display: grid;
-      place-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
       overflow: hidden;
+      padding: 16px 12px;
       background:
         linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) 0 0 / 28px 28px,
         linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px) 0 0 / 28px 28px,
@@ -39,6 +43,43 @@
       color: var(--ink);
       font-family: "Courier New", "Microsoft YaHei", monospace;
       letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      width: min(1080px, calc(100vw - 24px));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-bottom: 2px;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .brand {
+      color: var(--ink);
+      font-weight: 800;
+      text-decoration: none;
+      text-shadow: 2px 2px 0 #000;
+    }
+
+    .site-nav {
+      display: flex;
+      gap: 14px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .site-nav a {
+      text-decoration: none;
+    }
+
+    .site-nav a:hover,
+    .site-nav a[aria-current="page"] {
+      color: var(--accent);
     }
 
     .shell {
@@ -125,7 +166,7 @@
       box-shadow: 8px 8px 0 #050808;
       aspect-ratio: 16 / 9;
       min-height: 300px;
-      max-height: calc(100vh - 132px);
+      max-height: calc(100vh - 178px);
     }
 
     canvas {
@@ -228,8 +269,13 @@
 
     @media (max-width: 760px) {
       body {
+        justify-content: flex-start;
         overflow: auto;
         padding: 12px 0;
+      }
+
+      .site-header {
+        flex-wrap: wrap;
       }
 
       .topbar {
@@ -256,6 +302,15 @@
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <a class="brand" href="/">Roger Gao Wei</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+      <a href="/game/" aria-current="page">Game</a>
+    </nav>
+  </header>
+
   <main class="shell">
     <section class="topbar" aria-label="Game information">
       <h1>Retro Corner Catch</h1>

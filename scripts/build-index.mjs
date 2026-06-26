@@ -53,9 +53,10 @@ const html = `<!doctype html>
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/blog/">Roger Gao Wei</a>
+      <a class="brand" href="/">Roger Gao Wei</a>
       <nav>
         <a href="/">Home</a>
+        <a href="/game/">Game</a>
       </nav>
     </header>
 

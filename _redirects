@@ -1,0 +1,3 @@
+/posts/:slug /blog/posts/:slug 301
+/assets/:path* /blog/assets/:path* 301
+/content/:path* /blog/content/:path* 301

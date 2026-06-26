@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 
-const posts = JSON.parse(await readFile("content/posts.json", "utf8"))
+const posts = JSON.parse(await readFile("blog/content/posts.json", "utf8"))
   .toSorted((a, b) => new Date(b.sortDate) - new Date(a.sortDate));
 
 const archiveMonths = [...new Map(posts.map((post) => {
@@ -29,7 +29,7 @@ const cards = posts.map((post) => {
   previousArchiveKey = currentArchiveKey;
 
   return `${monthHeading}        <article class="post-card${post.status === "draft" ? " draft" : ""}">
-          <a href="/posts/${post.slug}.html">
+          <a href="/blog/posts/${post.slug}.html">
             ${media}
             <div>
               <p class="date">${escapeHtml(post.date)}${status}</p>
@@ -49,13 +49,13 @@ const html = `<!doctype html>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Roger Gao Wei Blog</title>
     <meta name="description" content="Personal essays and trip notes by Roger Gao Wei.">
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="/blog/styles.css">
   </head>
   <body>
     <header class="site-header">
-      <a class="brand" href="/">Roger Gao Wei</a>
+      <a class="brand" href="/blog/">Roger Gao Wei</a>
       <nav>
-        <a href="https://rogergaowei.com">Home</a>
+        <a href="/">Home</a>
       </nav>
     </header>
 
@@ -80,7 +80,7 @@ ${cards}
 </html>
 `;
 
-await writeFile("index.html", html);
+await writeFile("blog/index.html", html);
 
 function escapeHtml(value) {
   return String(value)

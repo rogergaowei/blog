@@ -15,7 +15,7 @@
     "date": "December 2025",
     "sortDate": "2025-12-22",
     "summary": "A Houston Zoo trip with tortoises, seals, penguins, bald eagles, bugs, lions, and a playground.",
-    "cover": "/assets/zoo/image3.jpg",
+    "cover": "/blog/assets/zoo/image3.jpg",
     "coverAlt": "Houston Zoo visit"
   },
   {
@@ -24,7 +24,7 @@
     "date": "April 2026",
     "sortDate": "2026-04-01",
     "summary": "I went to Fremont, museums, Monterey Bay Aquarium, Golden Gate Bridge, and the Computer History Museum.",
-    "cover": "/assets/california/image4.jpg",
+    "cover": "/blog/assets/california/image4.jpg",
     "coverAlt": "Golden Gate Bridge in the background"
   },
   {
@@ -43,7 +43,7 @@
     "date": "December 2025",
     "sortDate": "2025-12-26",
     "summary": "A first hot air balloon ride over Teotihuacan, with a sunrise, hundreds of balloons, and flight notes.",
-    "cover": "/assets/hot-air-balloon/image2.jpg",
+    "cover": "/blog/assets/hot-air-balloon/image2.jpg",
     "coverAlt": "Hot air balloons over Teotihuacan at sunrise",
     "status": "published"
   },
@@ -53,7 +53,7 @@
     "date": "January 2026",
     "sortDate": "2026-01-01",
     "summary": "A tour of a giant Minecraft territory with a rollercoaster, cherry tree biome, meat shop, and building techniques.",
-    "cover": "/assets/minecraft-territory/image1.jpg",
+    "cover": "/blog/assets/minecraft-territory/image1.jpg",
     "coverAlt": "Minecraft territory with a cherry tree biome and rollercoaster",
     "status": "published"
   },

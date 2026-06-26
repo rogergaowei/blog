@@ -2,16 +2,23 @@ import { readFile, writeFile } from "node:fs/promises";
 
 const posts = JSON.parse(await readFile("content/posts.json", "utf8"));
 
-const cards = posts.map((post) => `        <article class="post-card">
+const cards = posts.map((post) => {
+  const media = post.cover
+    ? `<img src="${post.cover}" alt="${escapeHtml(post.coverAlt)}">`
+    : `<div class="post-placeholder" aria-hidden="true">${escapeHtml(post.title.charAt(0))}</div>`;
+  const status = post.status === "draft" ? `<span class="status-pill">Writing</span>` : "";
+
+  return `        <article class="post-card${post.status === "draft" ? " draft" : ""}">
           <a href="/posts/${post.slug}.html">
-            <img src="${post.cover}" alt="${escapeHtml(post.coverAlt)}">
+            ${media}
             <div>
-              <p class="date">${escapeHtml(post.date)}</p>
+              <p class="date">${escapeHtml(post.date)}${status}</p>
               <h2>${escapeHtml(post.title)}</h2>
               <p>${escapeHtml(post.summary)}</p>
             </div>
           </a>
-        </article>`).join("\n");
+        </article>`;
+}).join("\n");
 
 const html = `<!doctype html>
 <html lang="en">

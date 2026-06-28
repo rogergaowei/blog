@@ -19,6 +19,7 @@ Blog posts include a small moderated comment system.
 - Public readers can submit a name and comment.
 - New comments are stored as `pending`.
 - Approved comments are shown publicly below the post.
+- Submitting a comment requires the shared family code.
 - Moderation lives at `/admin/comments.html`.
 
 Cloudflare runtime configuration:
@@ -26,8 +27,9 @@ Cloudflare runtime configuration:
 - D1 binding: `COMMENTS_DB`
 - D1 database: `roger_comments`
 - Required secret: `COMMENTS_ADMIN_TOKEN`
+- Required secret: `COMMENT_FAMILY_CODE`
 
-Do not commit the admin token to this repository. Set it as a Cloudflare Worker secret or runtime variable.
+Do not commit secrets to this repository. Set them as Cloudflare Worker secrets or runtime variables.
 
 ## Add a Google Doc post
 

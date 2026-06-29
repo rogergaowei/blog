@@ -21,7 +21,7 @@ export async function onRequestGet({ request, env }) {
     const limit = Math.min(parseInt(url.searchParams.get("limit") || "100", 10) || 100, 200);
     const rows = await db
       .prepare(
-        `SELECT id, post_slug, name, comment, status, ip_hash, user_agent, created_at, updated_at
+        `SELECT id, parent_id, post_slug, name, comment, status, ip_hash, user_agent, created_at, updated_at
          FROM comments
          WHERE status = ?
          ORDER BY created_at DESC
@@ -38,7 +38,7 @@ export async function onRequestGet({ request, env }) {
 
   const rows = await db
     .prepare(
-      `SELECT id, name, comment, created_at
+      `SELECT id, parent_id, name, comment, created_at
        FROM comments
        WHERE post_slug = ? AND status = 'approved'
        ORDER BY created_at ASC`
@@ -64,10 +64,23 @@ export async function onRequestPost({ request, env }) {
   const name = cleanText(payload.name || "", MAX_NAME_LENGTH);
   const comment = cleanText(payload.comment || "", MAX_COMMENT_LENGTH);
   const familyCode = String(payload.familyCode || "").trim();
+  const parentId = parseParentId(payload.parentId);
 
   if (!post) return json({ error: "Missing post slug." }, 400);
   if (!name) return json({ error: "Please enter a name." }, 400);
   if (!comment) return json({ error: "Please enter a comment." }, 400);
+
+  if (parentId) {
+    const parent = await db
+      .prepare(
+        `SELECT id
+         FROM comments
+         WHERE id = ? AND post_slug = ? AND status = 'approved' AND parent_id IS NULL`
+      )
+      .bind(parentId, post)
+      .first();
+    if (!parent) return json({ error: "The comment you are replying to was not found." }, 400);
+  }
 
   if (env.COMMENT_FAMILY_CODE && familyCode !== env.COMMENT_FAMILY_CODE) {
     return json({ error: "The family code is not correct." }, 403);
@@ -95,10 +108,10 @@ export async function onRequestPost({ request, env }) {
   const userAgent = cleanText(request.headers.get("user-agent") || "", 300);
   await db
     .prepare(
-      `INSERT INTO comments (post_slug, name, comment, status, ip_hash, user_agent)
-       VALUES (?, ?, ?, 'approved', ?, ?)`
+      `INSERT INTO comments (parent_id, post_slug, name, comment, status, ip_hash, user_agent)
+       VALUES (?, ?, ?, ?, 'approved', ?, ?)`
     )
-    .bind(post, name, comment, ipHash, userAgent)
+    .bind(parentId || null, post, name, comment, ipHash, userAgent)
     .run();
 
   return json({ ok: true, status: "approved" }, 201);
@@ -140,7 +153,7 @@ export async function onRequestDelete({ request, env }) {
   const id = Number(url.searchParams.get("id"));
   if (!Number.isInteger(id) || id <= 0) return json({ error: "Invalid comment id." }, 400);
 
-  await db.prepare("DELETE FROM comments WHERE id = ?").bind(id).run();
+  await db.prepare("DELETE FROM comments WHERE id = ? OR parent_id = ?").bind(id, id).run();
   return json({ ok: true });
 }
 
@@ -149,6 +162,7 @@ async function ensureSchema(db) {
     .prepare(
       `CREATE TABLE IF NOT EXISTS comments (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
+        parent_id INTEGER,
         post_slug TEXT NOT NULL,
         name TEXT NOT NULL,
         comment TEXT NOT NULL,
@@ -161,12 +175,25 @@ async function ensureSchema(db) {
     )
     .run();
 
+  await addColumnIfMissing(db, "comments", "parent_id", "INTEGER");
+
   await db
     .prepare("CREATE INDEX IF NOT EXISTS idx_comments_post_status ON comments(post_slug, status, created_at)")
     .run();
   await db
     .prepare("CREATE INDEX IF NOT EXISTS idx_comments_status_created ON comments(status, created_at)")
     .run();
+  await db
+    .prepare("CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_id, created_at)")
+    .run();
+}
+
+async function addColumnIfMissing(db, table, column, definition) {
+  const info = await db.prepare(`PRAGMA table_info(${table})`).all();
+  const exists = (info.results || []).some((row) => row.name === column);
+  if (!exists) {
+    await db.prepare(`ALTER TABLE ${table} ADD COLUMN ${column} ${definition}`).run();
+  }
 }
 
 function getDb(env) {
@@ -219,6 +246,12 @@ function normalizePostSlug(value) {
 
 function normalizeStatus(value) {
   return ["pending", "approved", "hidden"].includes(value) ? value : "";
+}
+
+function parseParentId(value) {
+  if (value === undefined || value === null || value === "") return null;
+  const id = Number(value);
+  return Number.isInteger(id) && id > 0 ? id : null;
 }
 
 function getClientIp(request) {

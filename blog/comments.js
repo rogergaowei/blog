@@ -8,6 +8,13 @@
   const status = root.querySelector("[data-comment-status]");
   const count = root.querySelector("[data-comment-count]");
   const apiUrl = `/api/comments?post=${encodeURIComponent(postSlug)}`;
+  let replyTarget = null;
+  const cancelReplyButton = document.createElement("button");
+  cancelReplyButton.type = "button";
+  cancelReplyButton.className = "comment-cancel-reply";
+  cancelReplyButton.textContent = "Cancel reply";
+  cancelReplyButton.hidden = true;
+  status.after(cancelReplyButton);
 
   function setStatus(message, kind) {
     status.textContent = message || "";
@@ -21,23 +28,50 @@
       return;
     }
 
-    list.innerHTML = comments
+    const repliesByParent = new Map();
+    const topLevel = [];
+    for (const comment of comments) {
+      if (comment.parent_id) {
+        const replies = repliesByParent.get(comment.parent_id) || [];
+        replies.push(comment);
+        repliesByParent.set(comment.parent_id, replies);
+      } else {
+        topLevel.push(comment);
+      }
+    }
+
+    list.innerHTML = topLevel
       .map((comment) => {
-        const date = new Date(`${comment.created_at}Z`);
-        const dateText = Number.isNaN(date.getTime())
-          ? ""
-          : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+        const replies = repliesByParent.get(comment.id) || [];
         return `
-          <article class="comment-item">
-            <header>
-              <strong>${escapeHtml(comment.name)}</strong>
-              <span>${escapeHtml(dateText)}</span>
-            </header>
-            <p>${escapeHtml(comment.comment).replace(/\n/g, "<br>")}</p>
+          <article class="comment-thread">
+            ${renderComment(comment, false)}
+            ${
+              replies.length
+                ? `<div class="comment-replies">${replies.map((reply) => renderComment(reply, true)).join("")}</div>`
+                : ""
+            }
           </article>
         `;
       })
       .join("");
+  }
+
+  function renderComment(comment, isReply) {
+    const date = new Date(`${comment.created_at}Z`);
+    const dateText = Number.isNaN(date.getTime())
+      ? ""
+      : date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    return `
+      <div class="comment-item ${isReply ? "comment-reply" : ""}" data-comment-id="${comment.id}" data-comment-name="${escapeHtml(comment.name)}">
+        <header>
+          <strong>${escapeHtml(comment.name)}</strong>
+          <span>${escapeHtml(dateText)}</span>
+        </header>
+        <p>${escapeHtml(comment.comment).replace(/\n/g, "<br>")}</p>
+        ${isReply ? "" : '<button type="button" class="comment-reply-button" data-reply-button>Reply</button>'}
+      </div>
+    `;
   }
 
   async function loadComments() {
@@ -57,6 +91,7 @@
     const formData = new FormData(form);
     const payload = {
       postSlug,
+      parentId: replyTarget ? replyTarget.id : null,
       name: formData.get("name"),
       comment: formData.get("comment"),
       familyCode: formData.get("familyCode"),
@@ -72,12 +107,36 @@
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.error || "Comment was not submitted.");
       form.reset();
+      clearReplyTarget();
       setStatus("Posted. Thanks for commenting.", "success");
       await loadComments();
     } catch (error) {
       setStatus(error.message || "Comment was not submitted.", "error");
     }
   });
+
+  list.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-reply-button]");
+    if (!button) return;
+    const item = button.closest("[data-comment-id]");
+    replyTarget = {
+      id: Number(item.dataset.commentId),
+      name: item.dataset.commentName || "comment",
+    };
+    cancelReplyButton.hidden = false;
+    form.querySelector("textarea[name='comment']").focus();
+    setStatus(`Replying to ${replyTarget.name}.`, "");
+  });
+
+  cancelReplyButton.addEventListener("click", () => {
+    clearReplyTarget();
+    setStatus("", "");
+  });
+
+  function clearReplyTarget() {
+    replyTarget = null;
+    cancelReplyButton.hidden = true;
+  }
 
   function escapeHtml(value) {
     return String(value)

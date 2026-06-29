@@ -335,12 +335,29 @@ code {
   margin-bottom: 24px;
 }
 
+.comment-thread {
+  display: grid;
+  gap: 10px;
+}
+
 .comment-item,
 .admin-comment {
   padding: 16px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
+}
+
+.comment-replies {
+  display: grid;
+  gap: 10px;
+  margin-left: 26px;
+  padding-left: 14px;
+  border-left: 2px solid var(--line);
+}
+
+.comment-reply {
+  background: #fbfaf7;
 }
 
 .comment-item header,
@@ -418,6 +435,8 @@ code {
 }
 
 .comment-form button,
+.comment-reply-button,
+.comment-cancel-reply,
 .admin-token-form button,
 .admin-toolbar button,
 .admin-comment button {
@@ -432,10 +451,25 @@ code {
 }
 
 .comment-form button:hover,
+.comment-reply-button:hover,
+.comment-cancel-reply:hover,
 .admin-token-form button:hover,
 .admin-toolbar button:hover,
 .admin-comment button:hover {
   filter: brightness(0.95);
+}
+
+.comment-reply-button,
+.comment-cancel-reply {
+  min-height: 34px;
+  margin-top: 10px;
+  padding: 6px 10px;
+  background: #fff;
+  color: var(--accent);
+}
+
+.comment-cancel-reply {
+  justify-self: start;
 }
 
 .comment-honeypot {
@@ -495,6 +529,11 @@ code {
   .image-grid,
   .image-grid.two {
     grid-template-columns: 1fr;
+  }
+
+  .comment-replies {
+    margin-left: 10px;
+    padding-left: 10px;
   }
 
   p,

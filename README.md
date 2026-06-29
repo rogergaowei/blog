@@ -19,6 +19,7 @@ Blog posts include a small family-code comment system.
 - Public readers can submit a name and comment.
 - Submitting a comment requires the shared family code.
 - Comments with the correct family code are published immediately.
+- Readers can reply to a top-level comment with the same family code.
 - Admin tools live at `/admin/comments.html` for hiding or deleting comments later.
 
 Cloudflare runtime configuration:

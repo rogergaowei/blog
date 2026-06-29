@@ -137,7 +137,7 @@
                 <article class="admin-comment" data-comment-id="${comment.id}">
                   <header>
                     <strong>${escapeHtml(comment.name)}</strong>
-                    <span>${escapeHtml(comment.post_slug)} · ${escapeHtml(comment.created_at)}</span>
+                    <span>${escapeHtml(comment.post_slug)}${comment.parent_id ? ` · reply to #${comment.parent_id}` : ""} · ${escapeHtml(comment.created_at)}</span>
                   </header>
                   <p>${escapeHtml(comment.comment).replace(/\n/g, "<br>")}</p>
                   <div>

@@ -21,6 +21,7 @@ Blog posts include a small family-code comment system.
 - Comments with the correct family code are published immediately.
 - Readers can reply to a top-level comment with the same family code.
 - Admin tools live at `/admin/comments.html` for hiding or deleting comments later.
+- New comments and replies can send email notifications through Resend.
 
 Cloudflare runtime configuration:
 
@@ -28,6 +29,9 @@ Cloudflare runtime configuration:
 - D1 database: `roger_comments`
 - Required secret: `COMMENTS_ADMIN_TOKEN`
 - Required secret: `COMMENT_FAMILY_CODE`
+- Optional secret: `RESEND_API_KEY`
+- Optional variable: `COMMENT_NOTIFY_TO` defaults to `rogergaowei@gmail.com`
+- Required for email notifications: `COMMENT_NOTIFY_FROM`, using a Resend-verified sender address
 
 Do not commit secrets to this repository. Set them as Cloudflare Worker secrets or runtime variables.
 

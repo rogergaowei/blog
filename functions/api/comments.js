@@ -49,7 +49,7 @@ export async function onRequestGet({ request, env }) {
   return json({ comments: rows.results || [] });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, ctx }) {
   const db = getDb(env);
   if (!db) return missingDb();
   await ensureSchema(db);
@@ -106,13 +106,28 @@ export async function onRequestPost({ request, env }) {
   }
 
   const userAgent = cleanText(request.headers.get("user-agent") || "", 300);
-  await db
+  const result = await db
     .prepare(
       `INSERT INTO comments (parent_id, post_slug, name, comment, status, ip_hash, user_agent)
        VALUES (?, ?, ?, ?, 'approved', ?, ?)`
     )
     .bind(parentId || null, post, name, comment, ipHash, userAgent)
     .run();
+
+  const notification = sendCommentNotification({
+    request,
+    env,
+    post,
+    name,
+    comment,
+    parentId,
+    commentId: result?.meta?.last_row_id,
+  });
+  if (ctx?.waitUntil) {
+    ctx.waitUntil(notification);
+  } else {
+    await notification;
+  }
 
   return json({ ok: true, status: "approved" }, 201);
 }
@@ -283,4 +298,86 @@ async function verifyTurnstile(secret, token, request) {
   if (!response.ok) return false;
   const result = await response.json();
   return Boolean(result.success);
+}
+
+async function sendCommentNotification({ request, env, post, name, comment, parentId, commentId }) {
+  if (!env.RESEND_API_KEY) return;
+
+  const to = env.COMMENT_NOTIFY_TO || "rogergaowei@gmail.com";
+  const from = env.COMMENT_NOTIFY_FROM;
+  if (!from) {
+    console.warn("COMMENT_NOTIFY_FROM is not configured; skipping comment email notification.");
+    return;
+  }
+
+  const postUrl = buildPostUrl(request, post);
+  const kind = parentId ? "reply" : "comment";
+  const subject = parentId
+    ? `New reply on Roger's blog: ${post}`
+    : `New comment on Roger's blog: ${post}`;
+  const text = [
+    `New ${kind} on Roger's blog`,
+    `Post: ${post}`,
+    parentId ? `Reply to comment: #${parentId}` : "",
+    commentId ? `Comment: #${commentId}` : "",
+    `Name: ${name}`,
+    "",
+    comment,
+    "",
+    `Post URL: ${postUrl}`,
+    `Admin: ${new URL("/admin/comments.html", request.url).toString()}`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  const html = `
+    <h2>New ${escapeHtml(kind)} on Roger's blog</h2>
+    <p><strong>Post:</strong> ${escapeHtml(post)}</p>
+    ${parentId ? `<p><strong>Reply to:</strong> #${parentId}</p>` : ""}
+    ${commentId ? `<p><strong>Comment:</strong> #${commentId}</p>` : ""}
+    <p><strong>Name:</strong> ${escapeHtml(name)}</p>
+    <blockquote>${escapeHtml(comment).replace(/\n/g, "<br>")}</blockquote>
+    <p><a href="${escapeHtml(postUrl)}">Open post</a></p>
+    <p><a href="${escapeHtml(new URL("/admin/comments.html", request.url).toString())}">Open admin</a></p>
+  `;
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${env.RESEND_API_KEY}`,
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        from,
+        to: [to],
+        subject,
+        html,
+        text,
+      }),
+    });
+
+    if (!response.ok) {
+      console.warn("Comment email notification failed.", await response.text());
+    }
+  } catch (error) {
+    console.warn("Comment email notification failed.", error);
+  }
+}
+
+function buildPostUrl(request, post) {
+  const url = new URL(request.url);
+  const path = url.hostname === "blog.rogergaowei.com"
+    ? `/posts/${post}.html`
+    : `/blog/posts/${post}.html`;
+  return new URL(path, url.origin).toString();
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }

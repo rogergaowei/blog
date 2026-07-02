@@ -1,10 +1,10 @@
 :root {
   color-scheme: dark;
   --bg: #02030d;
-  --text: #f6fbff;
-  --muted: #d2e6ff;
+  --text: #ffffff;
+  --muted: #e8f3ff;
   --line: rgba(97, 245, 255, 0.82);
-  --surface: rgba(5, 9, 28, 0.78);
+  --surface: rgba(2, 5, 18, 0.94);
   --accent: #61f5ff;
   --pink: #ff4f9a;
   --green: #51ffb2;
@@ -23,8 +23,8 @@ body {
     radial-gradient(circle at 82% 12%, rgba(97, 245, 255, 0.46), transparent 27%),
     radial-gradient(circle at 70% 82%, rgba(81, 255, 178, 0.32), transparent 26%),
     linear-gradient(135deg, rgba(182, 117, 255, 0.22), transparent 36%, rgba(255, 228, 94, 0.11)),
-    linear-gradient(rgba(97, 245, 255, 0.22) 1px, transparent 1px) 0 0 / 30px 30px,
-    linear-gradient(90deg, rgba(255, 79, 154, 0.2) 1px, transparent 1px) 0 0 / 30px 30px,
+    linear-gradient(rgba(97, 245, 255, 0.12) 1px, transparent 1px) 0 0 / 30px 30px,
+    linear-gradient(90deg, rgba(255, 79, 154, 0.1) 1px, transparent 1px) 0 0 / 30px 30px,
     var(--bg);
   background-attachment: fixed;
   color: var(--text);
@@ -103,7 +103,7 @@ nav a {
   padding: 8px 12px;
   border: 1px solid rgba(97, 245, 255, 0.6);
   border-radius: 999px;
-  background: rgba(5, 9, 28, 0.78);
+  background: rgba(2, 5, 18, 0.94);
   box-shadow: 0 0 18px rgba(97, 245, 255, 0.18);
   text-decoration: none;
 }
@@ -112,7 +112,7 @@ nav a:hover {
   color: var(--yellow);
   border-color: var(--yellow);
   box-shadow: 0 0 24px rgba(255, 228, 94, 0.42);
-  text-shadow: 0 0 10px var(--yellow), 0 0 28px rgba(255, 228, 94, 0.9);
+  text-shadow: 0 0 8px rgba(255, 228, 94, 0.42);
 }
 
 .page,
@@ -129,8 +129,8 @@ nav a:hover {
   border: 2px solid rgba(97, 245, 255, 0.72);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(97, 245, 255, 0.18), rgba(255, 79, 154, 0.16) 48%, rgba(81, 255, 178, 0.12)),
-    rgba(5, 9, 28, 0.66);
+    linear-gradient(135deg, rgba(97, 245, 255, 0.1), rgba(255, 79, 154, 0.09) 48%, rgba(81, 255, 178, 0.08)),
+    rgba(2, 5, 18, 0.92);
   box-shadow: inset 0 0 60px rgba(97, 245, 255, 0.16), 0 0 44px rgba(97, 245, 255, 0.3), 0 0 90px rgba(255, 79, 154, 0.18);
 }
 
@@ -160,7 +160,7 @@ nav a:hover {
   border: 2px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 79, 154, 0.22), rgba(97, 245, 255, 0.14) 52%, rgba(81, 255, 178, 0.16)),
+    linear-gradient(135deg, rgba(255, 79, 154, 0.08), rgba(97, 245, 255, 0.08) 52%, rgba(81, 255, 178, 0.08)),
     var(--surface);
   text-decoration: none;
   box-shadow: inset 0 0 34px rgba(97, 245, 255, 0.12), 0 0 28px rgba(97, 245, 255, 0.34), 0 0 56px rgba(255, 79, 154, 0.18);
@@ -184,7 +184,7 @@ nav a:hover {
   font-size: 13px;
   font-weight: 800;
   text-transform: uppercase;
-  text-shadow: 0 0 10px var(--yellow);
+  text-shadow: 0 0 8px rgba(255, 228, 94, 0.38);
 }
 
 .latest h3 {
@@ -192,7 +192,7 @@ nav a:hover {
   font-size: 25px;
   line-height: 1.15;
   color: var(--green);
-  text-shadow: 0 0 10px var(--green), 0 0 28px rgba(81, 255, 178, 0.68);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.78), 0 0 12px rgba(81, 255, 178, 0.4);
 }
 
 .latest p {
@@ -210,7 +210,7 @@ figcaption {
   color: var(--yellow);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 14px;
-  text-shadow: 0 0 10px rgba(255, 228, 94, 0.62);
+  text-shadow: 0 0 8px rgba(255, 228, 94, 0.34);
 }
 
 .eyebrow {
@@ -232,9 +232,8 @@ h1 {
   font-size: clamp(42px, 8vw, 76px);
   color: var(--accent);
   text-shadow:
-    0 0 8px var(--accent),
-    0 0 22px rgba(97, 245, 255, 0.92),
-    0 0 48px rgba(255, 79, 154, 0.62);
+    0 2px 0 rgba(0, 0, 0, 0.82),
+    0 0 18px rgba(97, 245, 255, 0.44);
 }
 
 h2 {
@@ -262,7 +261,7 @@ ul {
   border: 2px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(182, 117, 255, 0.18), rgba(97, 245, 255, 0.12)),
+    linear-gradient(135deg, rgba(182, 117, 255, 0.08), rgba(97, 245, 255, 0.08)),
     var(--surface);
   box-shadow: inset 0 0 36px rgba(97, 245, 255, 0.14), 0 0 30px rgba(97, 245, 255, 0.3);
 }
@@ -277,7 +276,7 @@ ul {
   margin: 0 0 12px;
   color: var(--accent);
   font-size: 16px;
-  text-shadow: 0 0 10px var(--accent);
+  text-shadow: 0 0 8px rgba(97, 245, 255, 0.38);
 }
 
 .archive-nav div {
@@ -294,7 +293,7 @@ ul {
   border: 1px solid rgba(97, 245, 255, 0.74);
   border-radius: 999px;
   color: var(--text);
-  background: rgba(5, 9, 28, 0.76);
+  background: rgba(2, 5, 18, 0.94);
   box-shadow: 0 0 14px rgba(97, 245, 255, 0.18);
   font-size: 14px;
   text-decoration: none;
@@ -312,7 +311,7 @@ ul {
 .archive-nav span {
   color: var(--pink);
   font-weight: 700;
-  text-shadow: 0 0 8px var(--pink);
+  text-shadow: 0 0 8px rgba(255, 79, 154, 0.34);
 }
 
 .blog-tools {
@@ -325,7 +324,7 @@ ul {
   border: 2px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 79, 154, 0.18), rgba(81, 255, 178, 0.12)),
+    linear-gradient(135deg, rgba(255, 79, 154, 0.08), rgba(81, 255, 178, 0.08)),
     var(--surface);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   box-shadow: inset 0 0 36px rgba(255, 79, 154, 0.12), 0 0 30px rgba(97, 245, 255, 0.3);
@@ -337,7 +336,7 @@ ul {
   color: var(--yellow);
   font-size: 14px;
   font-weight: 700;
-  text-shadow: 0 0 10px rgba(255, 228, 94, 0.62);
+  text-shadow: 0 0 8px rgba(255, 228, 94, 0.34);
 }
 
 .blog-tools input {
@@ -394,7 +393,7 @@ ul {
   font-size: 14px;
   text-align: right;
   white-space: nowrap;
-  text-shadow: 0 0 10px rgba(81, 255, 178, 0.62);
+  text-shadow: 0 0 8px rgba(81, 255, 178, 0.34);
 }
 
 .month-heading {
@@ -403,7 +402,7 @@ ul {
   font-size: 15px;
   font-weight: 700;
   text-transform: uppercase;
-  text-shadow: 0 0 10px var(--pink), 0 0 24px rgba(255, 79, 154, 0.62);
+  text-shadow: 0 0 8px rgba(255, 79, 154, 0.38);
 }
 
 .post-card a {
@@ -413,7 +412,7 @@ ul {
   align-items: center;
   padding: 18px;
   background:
-    linear-gradient(135deg, rgba(97, 245, 255, 0.16), rgba(255, 79, 154, 0.14) 54%, rgba(81, 255, 178, 0.1)),
+    linear-gradient(135deg, rgba(97, 245, 255, 0.08), rgba(255, 79, 154, 0.08) 54%, rgba(81, 255, 178, 0.08)),
     var(--surface);
   border: 2px solid var(--line);
   border-radius: 8px;
@@ -484,7 +483,7 @@ ul {
 .post-card h2 {
   margin: 4px 0 8px;
   color: var(--green);
-  text-shadow: 0 0 10px rgba(81, 255, 178, 0.76);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.78), 0 0 10px rgba(81, 255, 178, 0.34);
 }
 
 .post-card p {
@@ -578,7 +577,7 @@ code {
   color: var(--green);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 18px;
-  text-shadow: 0 0 10px rgba(81, 255, 178, 0.62);
+  text-shadow: 0 0 8px rgba(81, 255, 178, 0.34);
 }
 
 .comment-list {
@@ -598,7 +597,7 @@ code {
   border: 2px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(255, 79, 154, 0.16), rgba(97, 245, 255, 0.1)),
+    linear-gradient(135deg, rgba(255, 79, 154, 0.08), rgba(97, 245, 255, 0.08)),
     var(--surface);
   box-shadow: inset 0 0 30px rgba(255, 79, 154, 0.1), 0 0 26px rgba(97, 245, 255, 0.24);
 }
@@ -612,7 +611,7 @@ code {
 }
 
 .comment-reply {
-  background: rgba(2, 3, 13, 0.78);
+  background: rgba(2, 5, 18, 0.94);
 }
 
 .comment-item header,
@@ -630,7 +629,7 @@ code {
 .comment-item strong,
 .admin-comment strong {
   color: var(--accent);
-  text-shadow: 0 0 10px rgba(97, 245, 255, 0.62);
+  text-shadow: 0 0 8px rgba(97, 245, 255, 0.34);
 }
 
 .comment-item p,
@@ -667,7 +666,7 @@ code {
   border: 2px solid var(--line);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(97, 245, 255, 0.14), rgba(255, 79, 154, 0.12)),
+    linear-gradient(135deg, rgba(97, 245, 255, 0.08), rgba(255, 79, 154, 0.08)),
     var(--surface);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   box-shadow: inset 0 0 32px rgba(97, 245, 255, 0.1), 0 0 30px rgba(97, 245, 255, 0.28);

@@ -1,14 +1,16 @@
 :root {
-  color-scheme: light;
-  --bg: #f8f7f2;
-  --text: #211f1a;
-  --muted: #6b665c;
-  --line: #d9d4c8;
-  --surface: #ffffff;
-  --green: #0f6c5f;
-  --yellow: #f1c84b;
-  --red: #dd5f52;
-  --blue: #2f67b1;
+  color-scheme: dark;
+  --bg: #050713;
+  --text: #f6fbff;
+  --muted: #9fb5c9;
+  --line: rgba(97, 245, 255, 0.34);
+  --surface: rgba(10, 18, 38, 0.88);
+  --green: #51ffb2;
+  --yellow: #ffe45e;
+  --red: #ff4f9a;
+  --blue: #61f5ff;
+  --violet: #b675ff;
+  --shadow: rgba(97, 245, 255, 0.28);
 }
 
 * {
@@ -18,13 +20,27 @@
 body {
   min-height: 100vh;
   margin: 0;
-  background: var(--bg);
+  background:
+    linear-gradient(rgba(97, 245, 255, 0.08) 1px, transparent 1px) 0 0 / 34px 34px,
+    linear-gradient(90deg, rgba(255, 79, 154, 0.07) 1px, transparent 1px) 0 0 / 34px 34px,
+    var(--bg);
   color: var(--text);
   font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 a {
   color: inherit;
+}
+
+a,
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 4px;
 }
 
 .site-header {
@@ -45,7 +61,9 @@ nav a,
 }
 
 .brand {
+  color: var(--blue);
   font-weight: 800;
+  text-shadow: 0 0 18px rgba(97, 245, 255, 0.68);
 }
 
 nav {
@@ -56,7 +74,8 @@ nav {
 }
 
 nav a:hover {
-  color: var(--green);
+  color: var(--yellow);
+  text-shadow: 0 0 14px rgba(255, 228, 94, 0.8);
 }
 
 main {
@@ -89,6 +108,9 @@ h1 {
   font-size: clamp(44px, 7vw, 78px);
   line-height: 1.05;
   letter-spacing: 0;
+  text-shadow:
+    0 0 18px rgba(97, 245, 255, 0.45),
+    0 0 34px rgba(255, 79, 154, 0.28);
 }
 
 .visual {
@@ -105,15 +127,16 @@ h1 {
 .orbit {
   inset: 28px;
   border-radius: 50%;
+  box-shadow: 0 0 30px rgba(97, 245, 255, 0.22);
 }
 
 .orbit-one {
-  border-color: rgba(15, 108, 95, 0.38);
+  border-color: rgba(81, 255, 178, 0.56);
 }
 
 .orbit-two {
   inset: 82px 34px 42px 74px;
-  border-color: rgba(47, 103, 177, 0.34);
+  border-color: rgba(255, 79, 154, 0.46);
   transform: rotate(-12deg);
 }
 
@@ -123,10 +146,10 @@ h1 {
   width: 170px;
   height: 130px;
   border-radius: 8px;
-  color: #fff;
+  color: var(--bg);
   font-size: 22px;
   font-weight: 800;
-  box-shadow: 0 18px 40px rgba(38, 34, 26, 0.12);
+  box-shadow: 0 0 26px var(--shadow), 0 18px 40px rgba(0, 0, 0, 0.28);
 }
 
 .tile-blog {
@@ -154,14 +177,24 @@ h1 {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--surface);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04), 0 0 28px rgba(97, 245, 255, 0.12);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
 }
 
 .link-card a {
   min-height: 190px;
+  cursor: pointer;
 }
 
-.link-card a:hover {
-  border-color: var(--green);
+.link-card a:hover,
+.link-card a:focus-visible {
+  border-color: var(--yellow);
+  box-shadow: 0 0 0 1px rgba(255, 228, 94, 0.5), 0 0 34px rgba(255, 228, 94, 0.22);
+  transform: translateY(-2px);
+}
+
+.link-card a:active {
+  transform: translateY(1px);
 }
 
 .link-card span {
